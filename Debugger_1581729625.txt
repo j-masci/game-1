@@ -1,0 +1,1 @@
+[['app.init', 0.0], ['snapshot', 9299.521485567093, {'loop_count': 91749, 'loop_count_last': 0, 'is_paused': False, 'center': <Vector2(720, 450)>}]]
