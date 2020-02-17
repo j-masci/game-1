@@ -1,15 +1,14 @@
 from esper import esper
-import pygame
-import components
+import pygame, components, funcs, sys
 
 
 class PlayerHandler(esper.Processor):
 
     def process(self):
-        print(self.app.loop.count, self.app.loop.dt)
         for ev in self.app.loop.events:
             if ev.type is pygame.MOUSEMOTION:
-                print(ev)
+                # print(ev)
+                pass
 
 
 class DrawMostThings(esper.Processor):
@@ -18,8 +17,10 @@ class DrawMostThings(esper.Processor):
         self.draw_lines()
 
     def draw_player(self):
-        pos = self.world.component_for_entity(self.app.player, components.Position)
-        pygame.draw.circle(self.app.display, (120,50,200), (pos.x, pos.y), 20)
+        player = self.app.player
+        # player.orientation.deg += 1
+        points = funcs.GetRect.via_object(player)
+        pygame.draw.polygon(self.app.display, player.color.rgba(), points)
 
     def draw_lines(self):
         app = self.world.app

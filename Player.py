@@ -1,16 +1,19 @@
-import pygame, sys, math
+import pygame, sys, math, components
 
 
 class Player:
 
-    def __init__(self, x, y, size=20, color=(55, 12, 111)):
-
-        self.pos = pygame.Vector2(x, y)
-        self.velocity = pygame.Vector2(0, 0)
-        self.acceleration = pygame.Vector2(0, 0)
-
-        self.size = int(size)
-        self.color = pygame.Color(*color)
+    # todo: we might have to store a rect as data and update it upon changing
+    # position or orientation. for now, rect is derived, but, if we had say
+    # 100 entities on screen doing collision detection, we might have to store
+    # the data twice.
+    def __init__(self, x=100, y=100):
+        self.position = components.Position(x, y)
+        self.velocity = components.Velocity(0, 0)
+        self.acceleration = components.Acceleration(0, 0)
+        self.orientation = components.Orientation(0)
+        self.color = components.Color(21, 11, 134)
+        self.size = components.Size(10, 30)
 
     def mouse_ev_1(self, x, y, app):
 
@@ -27,29 +30,3 @@ class Player:
             self.velocity.scale_to_length(spd)
         else:
             self.velocity.x = self.velocity.y = 0
-
-    def event(self, ev, app):
-
-        if ev.type == pygame.MOUSEMOTION:
-            self.mouse_ev_1(ev.pos[0], ev.pos[1], app)
-
-        pass
-
-    def update(self, app):
-
-        self.velocity.x = self.velocity.x + self.acceleration.x
-        self.velocity.y = self.velocity.y + self.acceleration.y
-
-        self.pos.x = self.pos.x + self.velocity.x
-        self.pos.y = self.pos.y + self.velocity.y
-
-        self.pos.x = max(0, self.pos.x)
-        self.pos.x = min(self.pos.x, app.size.x)
-
-        self.pos.y = max(0, self.pos.y)
-        self.pos.y = min(self.pos.y, app.size.y)
-
-    def draw(self, display):
-
-        # pygame.draw.line(display, pygame.color(255, 255, 255))
-        pygame.draw.circle(display, self.color, (int(self.pos.x), int(self.pos.y)), int(self.size))

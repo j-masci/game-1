@@ -13,7 +13,7 @@ class Timer:
 
     # time between the time you pass in and now
     def time_since_given_time(self, t0):
-        return self.diff_times(time.time(), t0)
+        return self.diff_times(t0, time.time())
 
     # time between last call of this function, or class init, and now
     def time_since_last(self):
