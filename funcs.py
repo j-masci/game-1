@@ -48,18 +48,20 @@ class GetRect:
         center = (x, y)
         w2 = width/2
         h2 = height/2
-        points = []
-        points.append(RotatePoint(center, (x - w2, y - h2), deg))
-        points.append(RotatePoint(center, (x - w2, y + h2), deg))
-        points.append(RotatePoint(center, (x + w2, y + h2), deg))
-        points.append(RotatePoint(center, (x + w2, y - h2), deg))
-        return points
+        return [
+            rotate_point(center, (x - w2, y - h2), deg),
+            rotate_point(center, (x - w2, y + h2), deg),
+            rotate_point(center, (x + w2, y + h2), deg),
+            rotate_point(center, (x + w2, y - h2), deg)
+        ]
 
 
+# rotate a point around another point
+def rotate_point(origin, point, deg):
+    ox, oy = origin
+    px, py = point
 
+    qx = ox + math.cos(deg) * (px - ox) - math.sin(deg) * (py - oy)
+    qy = oy + math.sin(deg) * (px - ox) + math.cos(deg) * (py - oy)
+    return qx, qy
 
-# https://stackoverflow.com/questions/32572267/how-to-rotate-a-triangle-pygame
-def RotatePoint(c, p, r):
-    x = c[0]*math.cos(r)-c[0]+c[1]*math.sin(r)+p[0]*math.cos(r)+p[1]*math.sin(r)
-    y = -c[0]*math.sin(r)+c[1]*math.cos(r)-c[1]-p[0]*math.sin(r)+p[1]*math.cos(r)
-    return (x, y)

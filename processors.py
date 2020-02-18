@@ -6,9 +6,13 @@ class PlayerHandler(esper.Processor):
 
     def process(self):
         for ev in self.app.loop.events:
-            if ev.type is pygame.MOUSEMOTION:
-                # print(ev)
-                pass
+            if ev.type is pygame.KEYDOWN:
+                print(ev, pygame.K_RIGHT, pygame.K_LEFT)
+                if ev.key is pygame.K_RIGHT:
+                    self.app.player.orientation.deg += 0.25
+                elif ev.key is pygame.K_LEFT:
+                    self.app.player.orientation.deg -= 0.25
+                    pass
 
 
 class DrawMostThings(esper.Processor):
@@ -18,7 +22,6 @@ class DrawMostThings(esper.Processor):
 
     def draw_player(self):
         player = self.app.player
-        # player.orientation.deg += 1
         points = funcs.GetRect.via_object(player)
         pygame.draw.polygon(self.app.display, player.color.rgba(), points)
 
