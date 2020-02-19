@@ -1,5 +1,5 @@
 from app import App
-import exceptions, os
+import exceptions, os, sys
 
 if __name__ == "__main__":
     try:
@@ -9,3 +9,4 @@ if __name__ == "__main__":
             print("Restarting...")
             print("Todo: argv")
             os.system("python start.py")
+            sys.exit()
