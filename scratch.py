@@ -14,3 +14,7 @@
 # to make something change position at constant speed it would only
 # be natural to just store a velocity vector and apply it each iteration.
 # ok so if we want to change velocity then what...
+
+
+class Test(int):
+    pass
