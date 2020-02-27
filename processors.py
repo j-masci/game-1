@@ -5,14 +5,22 @@ import pygame, components, funcs, sys
 class PlayerHandler(esper.Processor):
 
     def process(self):
-        for ev in self.app.loop.events:
-            if ev.type is pygame.KEYDOWN:
-                print(ev, pygame.K_RIGHT, pygame.K_LEFT)
-                if ev.key is pygame.K_RIGHT:
-                    self.app.player.orientation.deg += 0.25
-                elif ev.key is pygame.K_LEFT:
-                    self.app.player.orientation.deg -= 0.25
-                    pass
+
+        if self.app.loop.keys_pressed[pygame.K_UP]:
+            self.app.player.position.move_in_direction(10, self.app.player.orientation.deg + 270)
+            pass
+
+        if self.app.loop.keys_pressed[pygame.K_DOWN]:
+            self.app.player.position.move_in_direction(-5, self.app.player.orientation.deg + 270)
+            pass
+
+        if self.app.loop.keys_pressed[pygame.K_RIGHT]:
+            self.app.player.orientation.deg += 2
+            pass
+
+        if self.app.loop.keys_pressed[pygame.K_LEFT]:
+            self.app.player.orientation.deg -= 2
+            pass
 
 
 class DrawMostThings(esper.Processor):

@@ -1,4 +1,6 @@
 import pygame, math
+
+
 # functions that can be called on entities
 # i don't know if this is the ideal place to put those functions
 # eventually this file will get large.
@@ -46,8 +48,8 @@ class GetRect:
     @staticmethod
     def via_primitives(x, y, width, height, deg):
         center = (x, y)
-        w2 = width/2
-        h2 = height/2
+        w2 = width / 2
+        h2 = height / 2
         return [
             rotate_point(center, (x - w2, y - h2), deg),
             rotate_point(center, (x - w2, y + h2), deg),
@@ -58,10 +60,20 @@ class GetRect:
 
 # rotate a point around another point
 def rotate_point(origin, point, deg):
+
+    rad = to_rad(deg)
+
     ox, oy = origin
     px, py = point
 
-    qx = ox + math.cos(deg) * (px - ox) - math.sin(deg) * (py - oy)
-    qy = oy + math.sin(deg) * (px - ox) + math.cos(deg) * (py - oy)
+    qx = ox + math.cos(rad) * (px - ox) - math.sin(rad) * (py - oy)
+    qy = oy + math.sin(rad) * (px - ox) + math.cos(rad) * (py - oy)
     return qx, qy
 
+
+def to_rad(deg):
+    return math.pi * deg / 180
+
+
+def to_deg(rad):
+    return rad * (180 / math.pi)

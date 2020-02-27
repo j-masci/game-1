@@ -86,6 +86,7 @@ class App:
 
             # gets and clears queued events
             self.loop.events = pygame.event.get()
+            self.loop.keys_pressed = pygame.key.get_pressed()
 
             # ie. check quit. Other events likely handled within processors
             self.do_events()
@@ -152,3 +153,4 @@ class Loop:
         self.count = 0
         self.dt = 0
         self.events = []
+        self.keys_pressed = []

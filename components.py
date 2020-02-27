@@ -1,19 +1,29 @@
-import pygame
+import pygame, funcs, math
+
+
+class Vector2(pygame.Vector2):
+
+    def move_in_direction(self, radius, deg):
+        theta = funcs.to_rad(deg)
+        x = radius * math.cos(theta)
+        y = radius * math.sin(theta)
+        self.x = self.x + x
+        self.y = self.y + y
 
 
 class Player:
     pass
 
 
-class Position(pygame.Vector2):
+class Position(Vector2):
     pass
 
 
-class Velocity(pygame.Vector2):
+class Velocity(Vector2):
     pass
 
 
-class Acceleration(pygame.Vector2):
+class Acceleration(Vector2):
     pass
 
 
@@ -41,6 +51,9 @@ class Shape2D(Shape):
 class Orientation:
     def __init__(self, deg):
         self.deg = deg
+
+    def radians(self):
+        return funcs.to_rad(self.deg)
 
 
 class Size:
