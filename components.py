@@ -11,7 +11,7 @@ class Vector2(pygame.Vector2):
         self.y = self.y + y
 
 
-class Player:
+class PlayerTag:
     pass
 
 

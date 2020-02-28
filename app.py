@@ -1,26 +1,22 @@
-import sys, pygame, collections
+import sys, pygame, math, collections
+import populator, components, processors, config, exceptions
 from esper import esper
 from debugger import Debugger
 from timer import Timer
-from Player import Player
-import processors, components, config, exceptions
 
 
+# the main app class that makes pretty much everything accessible.
+# app.world is our ECS
 class App:
-    instance = None
 
     def __init__(self):
-
-        self.instance = self
 
         self.timer = Timer()
         self.debugger = Debugger()
         self.debug_append("app.init")
 
-        # entity component system
         self.world = esper.World()
-        self.world.app = self
-        self.player = Player()
+        self.extend_world_instance()
 
         self.loop = Loop()
 
@@ -32,47 +28,20 @@ class App:
 
         self.display = pygame.display.set_mode((self.size.x, self.size.y))
 
-        # late-ish. may depend on world size.
-        self.populate()
+        # just before loop
+        populator.populate(self)
 
         self.do_loop()
 
-    def populate(self):
+    def extend_world_instance(self):
 
-        # not really using ecs for the player, at least, not right now.
-        self.player = Player()
+        # give app to all processor instances
+        # note: p.app.world === p.world
+        def add_processor(p, pr):
+            p.app = self
+            self.world.add_processor(p, pr)
 
-        self.add_processor(processors.PlayerHandler())
-        self.add_processor(processors.DrawMostThings())
-
-    def add_processor(self, processor):
-        processor.app = self
-        self.world.add_processor(processor)
-
-    def get_player_components(self):
-        return self.world.components_for_entity(self.player)
-
-    # do some top level event listening
-    # most event listening is done within processes
-    def do_events(self):
-        for ev in self.loop.events:
-
-            if ev.type == pygame.QUIT:
-                self.quit()
-
-            # alt f4 (not working)
-            if ev.type == pygame.KEYUP and ev.key == pygame.K_F4 and ev.mod is pygame.KMOD_ALT:
-                self.quit()
-
-            # restart
-            if ev.type == pygame.KEYUP and ev.key == pygame.K_F5:
-                print("Attempting to restart (todo: not working)")
-                self.quit(True)
-
-            # print debug
-            if ev.type == pygame.KEYUP and ev.key == pygame.K_F1:
-                print("Logging debugger to a file.")
-                self.debug_append("F1")
+        self.world.add_processor = add_processor
 
     def do_loop(self):
 
@@ -147,7 +116,7 @@ class App:
         self.debugger.data.append(a)
 
 
-# loop struct
+# some data that mutates on each loop iteration
 class Loop:
     def __init__(self):
         self.count = 0

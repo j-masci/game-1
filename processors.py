@@ -1,8 +1,17 @@
 from esper import esper
-import pygame, components, funcs, sys
+import pygame, components, funcs, sys, draw
 
 
-class PlayerHandler(esper.Processor):
+# extend to accept app instance in constructor
+class Processor(esper.Processor):
+
+    def __init__(self, app):
+        self.app = app
+        pass
+
+
+# players event listeners
+class PlayerHandler(Processor):
 
     def process(self):
 
@@ -15,27 +24,43 @@ class PlayerHandler(esper.Processor):
             pass
 
         if self.app.loop.keys_pressed[pygame.K_RIGHT]:
-            self.app.player.orientation.deg += 2
+            self.app.player.orientation.deg += 3
             pass
 
         if self.app.loop.keys_pressed[pygame.K_LEFT]:
-            self.app.player.orientation.deg -= 2
+            self.app.player.orientation.deg -= 3
             pass
 
 
-class DrawMostThings(esper.Processor):
+# listen for quit and stuff
+class TopLevelEventListener(Processor):
+
     def process(self):
-        self.draw_player()
-        self.draw_lines()
 
-    def draw_player(self):
-        player = self.app.player
-        points = funcs.GetRect.via_object(player)
-        pygame.draw.polygon(self.app.display, player.color.rgba(), points)
+        app = self.app
 
-    def draw_lines(self):
-        app = self.world.app
-        pygame.draw.line(app.display, (0, 0, 0), (0, app.center.y), (app.size.x, app.center.y))
-        pygame.draw.line(app.display, (0, 0, 0), (app.center.x, 0), (app.center.x, app.size.x))
-        pass
+        for ev in app .loop.events:
 
+            if ev.type == pygame.QUIT:
+                app.quit()
+
+            # alt f4 (not working)
+            if ev.type == pygame.KEYUP and ev.key == pygame.K_F4 and ev.mod is pygame.KMOD_ALT:
+                app.quit()
+
+            # restart
+            if ev.type == pygame.KEYUP and ev.key == pygame.K_F5:
+                print("Attempting to restart (todo: not working)")
+                app.quit(True)
+
+            # print debug
+            if ev.type == pygame.KEYUP and ev.key == pygame.K_F1:
+                print("Logging debugger to a file.")
+                app.debug_append("F1")
+
+
+# drawing is done late mostly
+class DrawMostThings(Processor):
+
+    def process(self):
+        draw.draw(self.app)
