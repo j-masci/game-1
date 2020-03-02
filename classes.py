@@ -1,4 +1,23 @@
-import time
+import time, pprint, game
+
+
+class Window:
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def get_center(self):
+        return game.components.Vector2(self.width / 2, self.height / 2)
+
+
+# some data that mutates on each loop iteration
+class Loop:
+    def __init__(self):
+        self.count = 0
+        self.dt = 0
+        self.events = []
+        self.keys_pressed = []
 
 
 class Timer:
@@ -25,3 +44,20 @@ class Timer:
     # time between class init and now
     def time_since_start(self):
         return self.time_since_given_time(self._start_time)
+
+
+class Debugger:
+
+    def __init__(self):
+        self.data = []
+        self.pp = pprint.PrettyPrinter()
+
+    def print(self):
+        print("debugger...", self.data)
+
+    def log(self):
+        filename = "./logs/Debugger_" + str(int(time.time())) + ".txt"
+        file = open(filename, "w")
+        output = self.pp.pformat(self.data)
+        file.write(output)
+        file.close()

@@ -1,9 +1,10 @@
-from app import App
 import exceptions, os, sys
+import game
 
 if __name__ == "__main__":
     try:
-        app = App()
+        game.init.start()
+
     except exceptions.QuitGameException as E:
         if E.code is "restart":
             print("Restarting...")

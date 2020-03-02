@@ -1,10 +1,10 @@
-import pygame, funcs, math
+import pygame, utils, math
 
 
 class Vector2(pygame.Vector2):
 
     def move_in_direction(self, radius, deg):
-        theta = funcs.to_rad(deg)
+        theta = utils.to_rad(deg)
         x = radius * math.cos(theta)
         y = radius * math.sin(theta)
         self.x = self.x + x
@@ -53,7 +53,7 @@ class Orientation:
         self.deg = deg
 
     def radians(self):
-        return funcs.to_rad(self.deg)
+        return utils.to_rad(self.deg)
 
 
 class Size:

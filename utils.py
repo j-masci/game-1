@@ -1,4 +1,13 @@
-import pygame, math
+import game, math
+
+
+def debug_append(event, data=None):
+    a = [event, game.timer.time_since_start()]
+
+    if data is not None:
+        a.append(data)
+
+    game.debugger.data.append(a)
 
 
 class GetRect:
