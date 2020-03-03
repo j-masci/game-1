@@ -55,16 +55,3 @@ def to_rad(deg):
 
 def to_deg(rad):
     return rad * (180 / math.pi)
-
-
-
-
-
-def get_player():
-
-    for ent, (tag, position, orientation, color, size) in game.world.get_component(c.PlayerTag, c.Position,
-                                                                                   c.Orientation, c.Color, c.Size):
-        return {
-            "tag": tag,
-            "position": position,
-        }

@@ -1,6 +1,5 @@
 import pygame, utils, math
 
-
 class Vector2(pygame.Vector2):
 
     def move_in_direction(self, radius, deg):
@@ -15,8 +14,14 @@ class PlayerTag:
     pass
 
 
-class Position(Vector2):
+class PersonTag:
     pass
+
+
+class Position(Vector2):
+
+    def to_tuple(self):
+        return int(self.x), int(self.y)
 
 
 class Velocity(Vector2):
@@ -43,7 +48,12 @@ class Shape2D(Shape):
     pass
 
 
+class UIComponent:
 
+    __slots__ = ['draw', 'on_click']
+
+    def __init__(self):
+        pass
 
 
 

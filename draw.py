@@ -3,21 +3,28 @@ import components as c
 
 
 def draw():
-    _player()
     _lines()
+    _persons()
+    _player()
 
 
 def _lines():
+    x0 = game.window_props.get_center().x
+    y0 = game.window_props.get_center().y
 
-    x0 = game.window.get_center().x
-    y0 = game.window.get_center().y
+    game.pygame.draw.line(game.window_surface, (0, 0, 0), (0, y0), (game.window_props.width, y0))
+    game.pygame.draw.line(game.window_surface, (0, 0, 0), (x0, 0), (x0, game.window_props.width))
 
-    game.pygame.draw.line(game.display, (0, 0, 0), (0, y0), (game.window.width, y0))
-    game.pygame.draw.line(game.display, (0, 0, 0), (x0, 0), (x0, game.window.width))
+
+def _persons():
+    c = game.components
+
+    for ent, (tag, position, size, color) in game.world.get_components(c.PersonTag, c.Position, c.Size, c.Color):
+        game.pygame.draw.circle(game.window_surface, color.rgba(), position.to_tuple(), size.width)
 
 
 def _player():
     player = game.player
     points = game.utils.GetRect.via_object(player)
-    game.pygame.draw.polygon(game.display, player.color.rgba(), points)
+    game.pygame.draw.polygon(game.window_surface, player.color.rgba(), points)
     pass

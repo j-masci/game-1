@@ -1,7 +1,7 @@
 import time, pprint, game
 
 
-class Window:
+class WindowProps:
 
     def __init__(self, width, height):
         self.width = width
