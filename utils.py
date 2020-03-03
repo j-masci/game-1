@@ -1,4 +1,5 @@
 import game, math
+import components as c
 
 
 def debug_append(event, data=None):
@@ -13,9 +14,12 @@ def debug_append(event, data=None):
 class GetRect:
 
     @staticmethod
+    def via_object(obj):
+        return GetRect.via_components(obj.position, obj.size, obj.orientation)
+
+    @staticmethod
     def via_components(position, size, orientation):
         return GetRect.via_primitives(position.x, position.y, size.width, size.height, orientation.deg)
-        pass
 
     # for now, returns 4 points, which can be used to construct a polygon
     # when we do collision, we might have to find out how to use the rect object
@@ -35,7 +39,6 @@ class GetRect:
 
 # rotate a point around another point
 def rotate_point(origin, point, deg):
-
     rad = to_rad(deg)
 
     ox, oy = origin
@@ -52,3 +55,16 @@ def to_rad(deg):
 
 def to_deg(rad):
     return rad * (180 / math.pi)
+
+
+
+
+
+def get_player():
+
+    for ent, (tag, position, orientation, color, size) in game.world.get_component(c.PlayerTag, c.Position,
+                                                                                   c.Orientation, c.Color, c.Size):
+        return {
+            "tag": tag,
+            "position": position,
+        }

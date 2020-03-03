@@ -13,7 +13,6 @@ def _entities():
 
 
 def _processors():
-
     def add(processor_instance, priority=0):
         game.world.add_processor(processor_instance, priority)
 
@@ -22,5 +21,15 @@ def _processors():
     add(p.DrawMostThings())
 
 
+# add player to ecs/world and to game module... 2 ways to access
+# the same components, for now
 def _player_entity():
-    game.world.create_entity(c.PlayerTag(), c.Position(50, 50), c.Orientation(90), c.Color(21, 11, 134), c.Size(30, 90))
+    player = game.classes.Player()
+    player.tag = c.PlayerTag()
+    player.position = c.Position(50, 50)
+    player.orientation = c.Orientation(90)
+    player.color = c.Color(21, 11, 134)
+    player.size = c.Size(30, 90)
+    _e = game.world.create_entity
+    player.entity_id = _e(player.tag, player.position, player.orientation, player.color, player.size)
+    game.player = player

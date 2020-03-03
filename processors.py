@@ -7,23 +7,22 @@ _p = game.esper.Processor
 class PlayerHandler(_p):
 
     def process(self):
-        pass
 
-        # if self.app.loop.keys_pressed[pygame.K_UP]:
-        #     self.app.player.position.move_in_direction(10, self.app.player.orientation.deg + 270)
-        #     pass
-        #
-        # if self.app.loop.keys_pressed[pygame.K_DOWN]:
-        #     self.app.player.position.move_in_direction(-5, self.app.player.orientation.deg + 270)
-        #     pass
-        #
-        # if self.app.loop.keys_pressed[pygame.K_RIGHT]:
-        #     self.app.player.orientation.deg += 3
-        #     pass
-        #
-        # if self.app.loop.keys_pressed[pygame.K_LEFT]:
-        #     self.app.player.orientation.deg -= 3
-        #     pass
+        if game.loop.keys_pressed[game.pygame.K_UP]:
+            game.player.position.move_in_direction(10, game.player.orientation.deg + 270)
+            pass
+
+        if game.loop.keys_pressed[game.pygame.K_DOWN]:
+            game.player.position.move_in_direction(-5, game.player.orientation.deg + 270)
+            pass
+
+        if game.loop.keys_pressed[game.pygame.K_RIGHT]:
+            game.player.orientation.deg += 3
+            pass
+
+        if game.loop.keys_pressed[game.pygame.K_LEFT]:
+            game.player.orientation.deg -= 3
+            pass
 
 
 # listen for quit and stuff

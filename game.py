@@ -1,8 +1,6 @@
-import pygame, sys, collections
+import pygame, sys
 from esper import esper
 import classes, config, utils, init, exceptions, components, processors, populator, draw
-
-print("game...")
 
 config = config
 draw = draw
@@ -23,3 +21,4 @@ debugger = classes.Debugger()
 timer = classes.Timer()
 loop = classes.Loop()
 world = esper.World(config.ecs_timed)
+player = False

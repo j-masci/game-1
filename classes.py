@@ -20,6 +20,10 @@ class Loop:
         self.keys_pressed = []
 
 
+class Player:
+    __slots__ = ["entity_id", "tag", "position", "orientation", "color", "size"]
+
+
 class Timer:
 
     def __init__(self, start_time=None):

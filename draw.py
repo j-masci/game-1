@@ -1,4 +1,5 @@
 import game
+import components as c
 
 
 def draw():
@@ -16,9 +17,7 @@ def _lines():
 
 
 def _player():
-    # app.world.get_components(...)
-
-    # player = self.app.player
-    # points = funcs.GetRect.via_object(player)
-    # pygame.draw.polygon(self.app.display, player.color.rgba(), points)
+    player = game.player
+    points = game.utils.GetRect.via_object(player)
+    game.pygame.draw.polygon(game.display, player.color.rgba(), points)
     pass
