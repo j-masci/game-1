@@ -124,7 +124,7 @@ class Orientation:
 
     def unit_vector(self):
         v = Vector2()
-        v.from_polar((self.radians, 1))
+        v.from_polar((1, self.degrees - 90))
         return v
 
 

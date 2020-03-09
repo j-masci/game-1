@@ -13,12 +13,24 @@ def sigmoid_rounded(x, error=0.03):
 
 
 # rounding is perhaps not the best name for this
-def maybe_round_up(value, limit, to):
-    return value if value <= limit else to
+def maybe_round_up(value, limit, error):
+    """
+    >>> maybe_round_up(0.97, 1, 0.03)
+    1
+    >>> maybe_round_up(0.9, 1, 0.03)
+    0.9
+    """
+    return value if value < limit - error else limit
 
 
-def maybe_round_down(value, limit, to):
-    return value if value >= limit else to
+def maybe_round_down(value, limit, error):
+    """
+    >>> maybe_round_down(-0.9, -1, 0.03)
+    -0.9
+    >>> maybe_round_down(-0.97, -1, 0.03)
+    -1
+    """
+    return value if value > limit + error else limit
 
 
 # ie. 0.99, -1, 1, 0.03 => 1

@@ -12,6 +12,27 @@ class GameObject:
         pass
 
 
+# maps any two real numbers to the set -1, 0, 1
+def cmp(value1, value2):
+    if value1 < value2:
+        return -1
+    elif value1 > value2:
+        return 1
+    else:
+        return 0
+
+
+# approach a target value without overstepping it
+def approach_value(current, target, step):
+
+    if current > target:
+        return max(target, current - step)
+    elif current < target:
+        return min(target, current + step)
+    else:
+        return current
+
+
 def reduce_plus_minus(units, step, threshold, below_threshold_return_value=0):
 
     ret = 0
@@ -60,11 +81,11 @@ class Player2(Player):
     def apply_friction(self):
 
         if game.loop.keys_pressed[game.pygame.K_SPACE]:
-            step_x = 1
-            step_y = 1
+            step_x = 0.6
+            step_y = 0.6
         else:
-            step_x = 0.01
-            step_y = 0.01
+            step_x = 0.05
+            step_y = 0.05
 
         self.rotationalForce.units = reduce_plus_minus(self.rotationalForce.units, 0.1, 0.1)
         self.momentum.x = reduce_plus_minus(self.momentum.x, step_x, step_x)
@@ -74,7 +95,6 @@ class Player2(Player):
 
         space = game.loop.keys_pressed[game.pygame.K_SPACE]
         shift = game.loop.keys_pressed[game.pygame.K_LSHIFT]
-        step = 1
 
         if game.loop.keys_pressed[game.pygame.K_BACKSPACE]:
             self.position.x = game.window_props.width / 2
@@ -96,6 +116,8 @@ class Player2(Player):
 
             if game.loop.keys_pressed[game.pygame.K_d]:
                 self.orientation.degrees += 7
+
+        step = 0.5
 
         # apply momentum relative to orientation and arrow keys
         if game.loop.keys_pressed[game.pygame.K_UP]:
@@ -149,9 +171,13 @@ class Player2(Player):
         game.pygame.draw.line(game.window_surface, game.colors.DARKSLATEBLUE, self.position,
                               self.position + self.momentum * 6, 3)
 
+
+        unit_direction = self.orientation.unit_vector()
+        unit_direction.scale_to_length(self.momentum.magnitude())
+
         # visual orientation vector
         game.pygame.draw.line(game.window_surface, game.colors.DARKGREEN, self.position,
-                              self.position + self.orientation.unit_vector() * 30, 3)
+                              self.position + 2 * unit_direction, 5)
 
         # color the front of the rectangle
         game.pygame.draw.line(game.window_surface, game.colors.PINK, self.points[3], self.points[0], 8)
