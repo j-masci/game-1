@@ -1,13 +1,58 @@
-import pygame, utils, math
+import game
 
-class Vector2(pygame.Vector2):
+# forces/momentum/etc
+# velocity: do we store it on the player?
+# is it calculated before or after moving?
+# every time we move to we store it .... ?
+# this causes issues if we move more than once
+# in the same update loop.
+# ie, having multiple forces act on the object
+# do we set velocity and have the player move according to the velocity?
+# i don't fucking know. if we do that, then how to we change the position
+# on its own ???
+# momentum can be thought of as a force, its the product of velocity with weight
+# momentum is counter acted by friction perhaps
+# friction is interesting if we try to calculate it based on the entire surface
+# of an object. also what if the object is rotating, or what if the object has
+# non constant friction co-efficients...
+# perhaps we don't store position ever
+# we only store multiple forces acting in different ways upon the same
+# object. each frame, all of those forces are used to determine the next position.
+# but still what about momentum, is it derived by differences in positions multiplied
+# by mass.... or we do we just store it as a force that also needs to be updated ?? fuck that
+# makes no sense.
 
-    def move_in_direction(self, radius, deg):
-        theta = utils.to_rad(deg)
-        x = radius * math.cos(theta)
-        y = radius * math.sin(theta)
+
+class Vector2(game.pygame.Vector2):
+
+    def move_in_direction(self, magnitude, deg):
+        theta = game.utils.to_rad(deg)
+        x = magnitude * game.math.cos(theta)
+        y = magnitude * game.math.sin(theta)
         self.x = self.x + x
         self.y = self.y + y
+
+
+class RotationalForce:
+    def __init__(self, units):
+        self.units = units
+
+    # maps self.units to the range (-1 + error, 1 - error)
+    # this isnt working well right now its complicated..
+    # i mean this function works fine but the idea does not because
+    # self.units just keeps growing and then we cant easily turn the other
+    # direction unless we can invert the sigmoid function which sucks balls
+    def sigmoid(self, error=0.01):
+        return game.mapping_functions.sigmoid_rounded(self.units, error)
+
+
+class Momentum(Vector2):
+    pass
+
+
+class Weight:
+    def __init__(self, units):
+        self.units = units
 
 
 class PlayerTag:
@@ -56,26 +101,43 @@ class UIComponent:
         pass
 
 
-
-
 class Orientation:
-    def __init__(self, deg):
-        self.deg = deg
 
+    def __init__(self, _degrees):
+        self.degrees = _degrees
+
+    @property
+    def degrees(self):
+        return self._degrees
+
+    @degrees.setter
+    def degrees(self, value):
+        self._degrees = game.utils.fix_degrees(value)
+
+    @property
     def radians(self):
-        return utils.to_rad(self.deg)
+        return game.utils.to_rad(self.degrees)
 
+    @radians.setter
+    def radians(self, value):
+        self._degrees = game.utils.fix_degrees(game.utils.to_deg(value))
 
-class Size:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+    def unit_vector(self):
+        v = Vector2()
+        v.from_polar((self.radians, 1))
+        return v
 
 
 class IntegerPoint:
     def __init__(self, x, y):
         self.x = int(x)
         self.y = int(y)
+
+
+class Size:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
 
 
 class Color:
@@ -89,40 +151,4 @@ class Color:
         return self.r, self.g, self.b, self.a
 
 
-# a player should...
-# have a position component
-# have an orientation component
-# have a polygon component (a vector of points)
-# ok great so fucking simple
-# but what about when we have no choice but to store
-# both the center point and the outer points.
-# how do we declare data dependencies among components so that
-# data doesn't become stale?
-# the simplest method is to store methods in entities that act on
-# multiple components, but, then re-usability points towards inheritance
-# which I want to avoid mostly.
-# maybe @property or __set_attr but idk.
-# its more about a declarative way to say that property X of component Y
-# upon changing, needs to invalidate property A of component B, or something
-# like that. but, this is only a dependency among two properties, there may
-# be cases with 3 or more components. also, this corresponds to properties
-# of components, why not just values in the first place ?
-# furthermore, data constraints are not component based, they are context based,
-# a component might be used in multiple entities where the constraint only
-# exists in some of them.
-# perhaps, values that need to trigger callbacks on change can use a class
-# but I need to look into how this affects objects, vectors, etc.
-# also does python have the necessary magic methods to make the single
-# variable behave like a normal variable so that we don't need to know
-# whether or not its an object wrapping a variable or just a plain old variable.
-# perhaps, we can just extend the Int or String classes or w/e.
-# that being said, does the component need to care whether it stores built-in
-# value types or a special type that reacts to mutation.
-# furthermore, this is still an issue because what if a component itself should
-# react to mutation, rather than registering a callback to all properties of
-# a component on change.
 
-
-class MutableScalar:
-    def __init__(self):
-        pass

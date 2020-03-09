@@ -19,7 +19,7 @@ class GetRect:
 
     @staticmethod
     def via_components(position, size, orientation):
-        return GetRect.via_primitives(position.x, position.y, size.width, size.height, orientation.deg)
+        return GetRect.via_primitives(position.x, position.y, size.width, size.height, orientation.degrees)
 
     # for now, returns 4 points, which can be used to construct a polygon
     # when we do collision, we might have to find out how to use the rect object
@@ -55,3 +55,9 @@ def to_rad(deg):
 
 def to_deg(rad):
     return rad * (180 / math.pi)
+
+
+def fix_degrees(deg):
+    # unsure how this might affect ints/floats
+    deg = deg % 360
+    return deg

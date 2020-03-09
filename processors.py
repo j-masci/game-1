@@ -16,13 +16,14 @@ class GameEvents(_p):
         for ent, (tag, position, size) in game.world.get_components(c.UIComponent):
             pass
 
-        # alt-f4
+        # alt-f4.
+        # todo: this actually causes a fatal error which happens to be ok for now since that also quits the game.
         if keys[pg.K_F4] and keys[pg.KMOD_ALT]:
             game.init.quit()
 
         for ev in game.loop.events:
 
-            # ui buttons
+            # ui buttons (not implemented)
             if ev.type == pg.USEREVENT:
                 if ev.user_type == 'ui_button_pressed':
                     pass
@@ -44,33 +45,10 @@ class GameEvents(_p):
                 game.utils.debug_append("F1")
 
 
-class Stuff(_p):
+class GameObjectUpdates(_p):
 
     def process(self):
-
-        shift = game.loop.keys_pressed[game.pygame.K_LSHIFT]
-
-        if game.loop.keys_pressed[game.pygame.K_1]:
-            game.player.position.x = game.window_props.get_center().x
-            game.player.position.y = game.window_props.get_center().y
-
-        if game.loop.keys_pressed[game.pygame.K_2]:
-            game.player.size.height *= 2
-            game.player.size.width *= 0.5
-
-        if game.loop.keys_pressed[game.pygame.K_3]:
-            game.player.size.height *= 0.7
-            game.player.size.width *= 1.5
-
-        if game.loop.keys_pressed[game.pygame.K_4]:
-            game.player.size.height *= 0.9
-            game.player.size.width *= 0.9
-
-        if game.loop.keys_pressed[game.pygame.K_5]:
-            if shift:
-                game.populator._delete_random_person()
-            else:
-                game.populator._people(1)
+        game.player.update()
 
 
 class PersonsHandler(_p):
@@ -97,28 +75,6 @@ class PersonsHandler(_p):
                 #     position.y += 10 if r3 > 50 else -10
 
 
-# players event listeners
-class PlayerHandler(_p):
-
-    def process(self):
-
-        space = game.loop.keys_pressed[game.pygame.K_SPACE]
-        # shift = game.loop.keys_pressed[game.pygame.K_LSHIFT]
-
-        if game.loop.keys_pressed[game.pygame.K_UP]:
-            game.player.position.move_in_direction(10 if not space else 10, game.player.orientation.deg + 270)
-
-        if game.loop.keys_pressed[game.pygame.K_DOWN]:
-            game.player.position.move_in_direction(-10 if not space else -10, game.player.orientation.deg + 270)
-
-        if game.loop.keys_pressed[game.pygame.K_RIGHT]:
-            game.player.orientation.deg += 6 if not space else 9
-
-        if game.loop.keys_pressed[game.pygame.K_LEFT]:
-            game.player.orientation.deg -= 6 if not space else 9
-
-
-# draw things late
 class DrawMostThings(_p):
 
     def process(self):

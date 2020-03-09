@@ -4,39 +4,23 @@ import components as c
 import processors as p
 
 
+# currently, the player object is not done in ECS because its
+# only making it far more difficult right now. in the future
+# maybe it will be. see game.player
 def populate():
     _entities()
     _processors()
 
 
 def _entities():
-    _player_entity()
     _people(10)
 
 
 def _processors():
-    def add(processor_instance, priority=0):
-        game.world.add_processor(processor_instance, priority)
-
-    add(p.GameEvents())
-    add(p.Stuff())
-    add(p.PlayerHandler())
-    add(p.PersonsHandler())
-    add(p.DrawMostThings())
-
-
-# add player to ecs/world and to game module... 2 ways to access
-# the same components, for now
-def _player_entity():
-    player = game.classes.Player()
-    player.tag = c.PlayerTag()
-    player.position = c.Position(500, 500)
-    player.orientation = c.Orientation(90)
-    player.color = c.Color(21, 11, 134)
-    player.size = c.Size(60, 20)
-    _e = game.world.create_entity
-    player.entity_id = _e(player.tag, player.position, player.orientation, player.color, player.size)
-    game.player = player
+    game.world.add_processor(p.GameEvents())
+    game.world.add_processor(p.GameObjectUpdates())
+    game.world.add_processor(p.PersonsHandler())
+    game.world.add_processor(p.DrawMostThings())
 
 
 def _delete_random_person():
