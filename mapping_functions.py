@@ -1,4 +1,4 @@
-import math, sys
+import math, sys, random
 
 
 # maps (-infinity, infinity) to (-1, 1)
@@ -39,3 +39,31 @@ def maybe_round_both_ways(value, min, max, error):
     _value = maybe_round_down(value, min + error, min)
     _value = maybe_round_up(value, max - error, max)
     return _value
+
+
+def maybe_negative(value):
+
+    if random.randint(0,100) > 50:
+        return -1 * abs(value)
+    else:
+        return abs(value)
+
+
+# approach a target value without overstepping it
+def approach_value(current, target, step):
+    """
+    >>> approach_value(1, 0, 0.1)
+    0.9
+    >>> approach_value(-1, 0, 0.1)
+    -0.9
+    >>> approach_value(0.5, 0, 1)
+    0
+    >>> approach_value(1,2,3)
+    1234123
+    """
+    if current > target:
+        return max(target, current - step)
+    elif current < target:
+        return min(target, current + step)
+    else:
+        return current

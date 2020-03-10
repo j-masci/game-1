@@ -26,9 +26,13 @@ import game
 class Vector2(game.pygame.Vector2):
 
     def move_in_direction(self, magnitude, deg):
+
+        print("Move...", magnitude, deg, self.x, self.y)
+
         theta = game.utils.to_rad(deg)
         x = magnitude * game.math.cos(theta)
         y = magnitude * game.math.sin(theta)
+
         self.x = self.x + x
         self.y = self.y + y
 
@@ -46,7 +50,11 @@ class RotationalForce:
         return game.mapping_functions.sigmoid_rounded(self.units, error)
 
 
-class Momentum(Vector2):
+class Velocity(Vector2):
+    pass
+
+
+class Acceleration(Vector2):
     pass
 
 
@@ -67,14 +75,6 @@ class Position(Vector2):
 
     def to_tuple(self):
         return int(self.x), int(self.y)
-
-
-class Velocity(Vector2):
-    pass
-
-
-class Acceleration(Vector2):
-    pass
 
 
 # a vector of points

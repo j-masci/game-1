@@ -1,11 +1,12 @@
 # this is the god module, if that's a thing
 import pygame, pygame_gui, sys, math
 from esper import esper
-import classes, config, utils, init, exceptions, components, processors, populator, draw, colors
-import player as _player, mapping_functions
+import classes, config, utils, init, exceptions, components, processors, populator, draw, colors, random
+import game_objects, mapping_functions
 
 # rebelling against imports
 config = config
+random = random
 draw = draw
 sys = sys
 math = math
@@ -28,8 +29,20 @@ debugger = classes.Debugger()
 timer = classes.Timer()
 loop = classes.Loop()
 world = esper.World(config.ecs_timed)
-player = _player.Player2()
+game_objects = game_objects
 
 # setup somewhere in start()
 gui_manager = False
 window_surface = False
+
+# see populator.populate()
+player = False
+circle_things = []
+
+
+def test_init():
+    global thing
+    thing = 123
+
+
+

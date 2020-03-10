@@ -2,19 +2,16 @@ import game
 import random
 import components as c
 
-_p = game.esper.Processor
+Processor = game.esper.Processor
 
 
 # quit and stuff
-class GameEvents(_p):
+class Events(Processor):
 
     def process(self):
 
         pg = game.pygame
         keys = game.loop.keys_pressed
-
-        for ent, (tag, position, size) in game.world.get_components(c.UIComponent):
-            pass
 
         # alt-f4.
         # todo: this actually causes a fatal error which happens to be ok for now since that also quits the game.
@@ -44,39 +41,31 @@ class GameEvents(_p):
                 print("Logging debugger to a file.")
                 game.utils.debug_append("F1")
 
+            # 1: add a circle
+            if ev.type == pg.KEYUP and ev.key == pg.K_1:
+                game.populator.add_circles(1)
 
-class GameObjectUpdates(_p):
+            # 2: delete a circle
+            if ev.type == pg.KEYUP and ev.key == pg.K_2:
+                game.populator.delete_circle()
+
+            # 3: make all circles do stupid things
+            if ev.type == pg.KEYUP and ev.key == pg.K_3:
+                for circle in game.circle_things:
+                    game.game_objects.GameObject.randomize_velocity(circle)
+
+
+class Update(Processor):
 
     def process(self):
+
         game.player.update()
 
-
-class PersonsHandler(_p):
-
-    def process(self):
-
-        for ent, (tag, position, size) in game.world.get_components(c.PersonTag, c.Position, c.Size):
-
-            r = random.randint(0,100)
-
-            if r > 40:
-
-                r2 = random.randint(0, 100)
-                r3 = random.randint(0, 100)
-                r4 = random.randint(0, 100)
-
-                position.x += 20 if r3 > 50 else -20
-                position.y += 10 if r4 > 50 else -10
-
-                # if r2 > 40:
-                #     position.x += 20 if r3 > 50 else -20
-                #
-                # if r2 < 60:
-                #     position.y += 10 if r3 > 50 else -10
+        for e in game.circle_things:
+            e.update()
 
 
-class DrawMostThings(_p):
+class Draw(Processor):
 
     def process(self):
         game.draw.draw()
-
