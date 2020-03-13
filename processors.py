@@ -59,10 +59,8 @@ class Update(Processor):
 
     def process(self):
 
-        game.player.update()
-
-        for e in game.circle_things:
-            e.update()
+        for obj in game.objects:
+            obj.update()
 
 
 class Draw(Processor):

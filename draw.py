@@ -6,10 +6,8 @@ def draw():
 
     _draw_lines()
 
-    game.player.draw()
-
-    for e in game.circle_things:
-        e.draw()
+    for obj in game.objects:
+        obj.draw()
 
 
 def _draw_lines():

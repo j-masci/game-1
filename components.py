@@ -1,5 +1,6 @@
 import game
 
+
 # forces/momentum/etc
 # velocity: do we store it on the player?
 # is it calculated before or after moving?
@@ -26,15 +27,22 @@ import game
 class Vector2(game.pygame.Vector2):
 
     def move_in_direction(self, magnitude, deg):
-
-        print("Move...", magnitude, deg, self.x, self.y)
-
         theta = game.utils.to_rad(deg)
         x = magnitude * game.math.cos(theta)
         y = magnitude * game.math.sin(theta)
 
         self.x = self.x + x
         self.y = self.y + y
+
+    def to_tuple(self):
+        return self.x, self.y
+
+    # generally good for positions, not for velocity
+    def to_tuple_using_ints(self):
+        return int(self.x), int(self.y)
+
+    def copy(self):
+        return Position(self.x, self.y)
 
 
 class RotationalForce:
@@ -72,9 +80,7 @@ class PersonTag:
 
 
 class Position(Vector2):
-
-    def to_tuple(self):
-        return int(self.x), int(self.y)
+    pass
 
 
 # a vector of points
@@ -94,7 +100,6 @@ class Shape2D(Shape):
 
 
 class UIComponent:
-
     __slots__ = ['draw', 'on_click']
 
     def __init__(self):
@@ -127,6 +132,66 @@ class Orientation:
         v.from_polar((1, self.degrees - 90))
         return v
 
+    # approach target degrees by shortest "radial" path, without going
+    # beyond the target.
+    @staticmethod
+    def approach_value(current_degrees, target_degrees, step):
+
+        fix = game.utils.fix_degrees
+
+        c = fix(current_degrees)
+        t = fix(target_degrees)
+
+        get_dir = Orientation.get_optimal_direction
+        direction = get_dir(c, t)
+
+        # if optimal direction changes, we over stepped
+        if direction is -1:
+            dest = fix(c - step)
+            return dest if get_dir(dest, t) is -1 else t
+        elif direction is 1:
+            dest = fix(c + step)
+            return dest if get_dir(dest, t) is 1 else t
+        else:
+            game.player.color.set(100, 100, 100)
+            return c
+
+    @staticmethod
+    def get_optimal_direction(current_degrees, target_degrees):
+        """
+        >>> Orientation.get_optimal_direction(181, 0)
+        1
+        >>> Orientation.get_optimal_direction(355, 5)
+        1
+        >>> Orientation.get_optimal_direction(5, 355)
+        -1
+        >>> Orientation.get_optimal_direction(179, 0)
+        -1
+        >>> Orientation.get_optimal_direction(0, 360)
+        0
+        >>> Orientation.get_optimal_direction(180, 0)
+        0
+        >>> Orientation.get_optimal_direction(0, 180)
+        0
+        >>> Orientation.get_optimal_direction(0, 179)
+        1
+        >>> Orientation.get_optimal_direction(0, 181)
+        -1
+        """
+        c = game.utils.fix_degrees(current_degrees)
+        t = game.utils.fix_degrees(target_degrees)
+
+        diff = game.utils.fix_degrees(c - t)
+
+        if diff is 0:
+            return 0
+        elif diff is 180:
+            return 0
+        elif diff > 180:
+            return 1
+        else:
+            return -1
+
 
 class IntegerPoint:
     def __init__(self, x, y):
@@ -142,6 +207,18 @@ class Size:
 
 class Color:
     def __init__(self, r, g, b, a=1):
+        self.r = False
+        self.g = False
+        self.b = False
+        self.a = False
+        self.set(r, g, b, a)
+
+    @staticmethod
+    def random_instance():
+        r = game.random.randint
+        return Color(r(0, 255), r(0, 255), r(0, 255))
+
+    def set(self, r, g, b, a=1):
         self.r = r
         self.g = g
         self.b = b
@@ -149,6 +226,3 @@ class Color:
 
     def rgba(self):
         return self.r, self.g, self.b, self.a
-
-
-

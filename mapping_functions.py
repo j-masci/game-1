@@ -43,7 +43,7 @@ def maybe_round_both_ways(value, min, max, error):
 
 def maybe_negative(value):
 
-    if random.randint(0,100) > 50:
+    if random.randint(0,2) > 1:
         return -1 * abs(value)
     else:
         return abs(value)

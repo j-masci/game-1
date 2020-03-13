@@ -39,6 +39,10 @@ class GetRect:
 
 # rotate a point around another point
 def rotate_point(origin, point, deg):
+    """
+    >>> rotate_point((0,0),(1,1),90)
+    (0,1)
+    """
     rad = to_rad(deg)
 
     ox, oy = origin
@@ -58,6 +62,27 @@ def to_deg(rad):
 
 
 def fix_degrees(deg):
-    # unsure how this might affect ints/floats
-    deg = deg % 360
-    return deg
+    """
+    >>> fix_degrees(360)
+    0
+    >>> fix_degrees(0)
+    0
+    >>> fix_degrees(-90)
+    270
+    >>> fix_degrees(375)
+    15
+    >>> fix_degrees(10.0)
+    10.0
+    """
+    return deg % 360
+
+
+def filter_via_instance(vector, cls):
+
+    ret = []
+
+    for obj in vector:
+        if isinstance(obj, cls):
+            ret.append(obj)
+
+    return ret

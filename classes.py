@@ -19,6 +19,13 @@ class Loop:
         self.events = []
         self.keys_pressed = []
 
+    def events_by_type(self, type):
+
+        def f(ev):
+            return ev.type == type
+
+        return filter(f, self.events)
+
 
 class Player:
     __slots__ = ["entity_id", "tag", "position", "orientation", "color", "size"]

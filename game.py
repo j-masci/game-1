@@ -2,7 +2,7 @@
 import pygame, pygame_gui, sys, math
 from esper import esper
 import classes, config, utils, init, exceptions, components, processors, populator, draw, colors, random
-import game_objects, mapping_functions
+import game_objects, mapping_functions, on_screen_debugger
 
 # rebelling against imports
 config = config
@@ -19,6 +19,7 @@ exceptions = exceptions
 components = components
 processors = processors
 populator = populator
+on_screen_debugger = on_screen_debugger
 classes = classes
 mapping_functions = mapping_functions
 gui = pygame_gui
@@ -30,6 +31,7 @@ timer = classes.Timer()
 loop = classes.Loop()
 world = esper.World(config.ecs_timed)
 game_objects = game_objects
+objects = []
 
 # setup somewhere in start()
 gui_manager = False
@@ -40,9 +42,5 @@ player = False
 circle_things = []
 
 
-def test_init():
-    global thing
-    thing = 123
-
-
-
+def get_objects_of_instance(cls):
+    return utils.filter_via_instance(objects, cls)

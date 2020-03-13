@@ -1,4 +1,4 @@
-import game, collections, os, pygame_gui, time
+import game, collections, os, pygame_gui, time, pprint
 
 
 # starts the game
@@ -19,36 +19,39 @@ def start():
     # add entities
     game.populator.populate()
 
+    # invisible mouse
+    # game.pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
+    game.pygame.mouse.set_visible(False)
+
+    # font init
+    game.pygame.font.init()
+
     while True:
 
-        times = collections.OrderedDict()
-
-        def track(key, value):
-            times[key] = value
-
-        track("Test", 123)
-
-        times = collections.OrderedDict()
-        game.timer.time_since_last()
-
         game.loop.count += 1
+
+        timer = game.classes.Timer()
+        times = collections.OrderedDict()
 
         # gets and clears queued events
         game.loop.events = game.pygame.event.get()
         game.loop.keys_pressed = game.pygame.key.get_pressed()
 
-        # reset the frame, before processors draw.
+        # fill the background
         game.window_surface.fill(game.config.background_color)
 
-        # invoke registered processors
+        # update/draw
         game.world.process()
 
-        times["process_1"] = game.timer.time_since_last()
+        game.on_screen_debugger.draw(game.window_surface)
+
+        times["process_1"] = timer.time_since_start()
 
         # updates the window with the new stuff
         game.pygame.display.flip()
 
-        times["total_cpu"] = game.timer.time_since_last()
+        end_time = timer.time_since_start()
+        times["end_time"] = end_time
 
         # throttle updates per second
         game.loop.dt = game.clock.tick(game.config.updates_per_second)
@@ -56,10 +59,7 @@ def start():
         game.gui_manager.update(time_delta)
         game.gui_manager.draw_ui(game.window_surface)
 
-        times["dt_1"] = game.timer.time_since_last()
-
-        # need to keep this below 1
-        times["cpu_pct"] = (times["total_cpu"] / times["dt_1"]) if times["dt_1"] > 0 else 0
+        game.on_screen_debugger.state["frame_time"] = str(round(end_time * 100, 1)) + "ms"
 
         if game.config.track_times_in_loop:
             game.utils.debug_append("Loop # " + str(game.loop.count), times)

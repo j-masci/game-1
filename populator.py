@@ -4,8 +4,9 @@ import game
 def populate():
 
     # entities
-    add_circles(10)
+    # add_circles(7)
     game.player = game.game_objects.Player()
+    game.objects.append(game.player)
 
     # processors
     game.world.add_processor(game.processors.Events())
@@ -15,7 +16,7 @@ def populate():
 
 def add_circles(count):
     for i in range(0, count):
-        game.circle_things.append(game.game_objects.CircleThingThatMoves())
+        game.objects.append(game.game_objects.CircleThingThatMoves())
 
 
 def delete_circle():
