@@ -54,7 +54,7 @@ class GameObject:
         self.can_shoot_at = game.loop.count + rate
 
         bullet = Bullet(duration)
-        bullet.velocity = 15 * self.orientation.unit_vector()
+        bullet.velocity = 8 * self.orientation.unit_vector()
         bullet.position = self.position.copy()
         game.objects.append(bullet)
 
@@ -75,6 +75,24 @@ class GameObject:
             self.velocity.y = -1 * multiplier * abs(self.velocity.y)
 
         if self.position.y < 0:
+            self.velocity.y = multiplier * abs(self.velocity.y)
+
+    @staticmethod
+    def keep_on_screen_circle(self):
+
+        multiplier = 0.9
+
+        # primitive method for the time being, uses center position
+        if self.position.x + self.size.width > game.window_props.width:
+            self.velocity.x = -1 * multiplier * abs(self.velocity.x)
+
+        if self.position.x - self.size.width < 0:
+            self.velocity.x = multiplier * abs(self.velocity.x)
+
+        if self.position.y + self.size.width > game.window_props.height:
+            self.velocity.y = -1 * multiplier * abs(self.velocity.y)
+
+        if self.position.y - self.size.width < 0:
             self.velocity.y = multiplier * abs(self.velocity.y)
 
 
@@ -99,14 +117,15 @@ class CircleThingThatMoves(GameObject):
                                 int(self.size.width))
 
     def update(self):
+
         # before movement
-        GameObject.apply_friction(self, 0.001)
+        GameObject.apply_friction(self, 0.01)
 
         # movement
         GameObject.resolve_position(self)
 
         # after movement
-        GameObject.keep_on_screen(self)
+        GameObject.keep_on_screen_circle(self)
 
 
 class Explosion(GameObject):
@@ -121,8 +140,8 @@ class Explosion(GameObject):
         self.spawn_time = game.loop.count
 
         self.life = 0
-        self.max_life = 75
-        self.increment = 3
+        self.max_life = 16
+        self.increment = 2
 
     def draw(self):
         if self.life >= 0:
@@ -228,7 +247,7 @@ class Bullet(GameObject):
         GameObject.resolve_position(self)
 
         # after movement
-        GameObject.keep_on_screen(self)
+        GameObject.keep_on_screen_circle(self)
 
 
 # player with momentum and rotational force
@@ -265,7 +284,7 @@ class Player(GameObject):
         right_mouse = game.pygame.mouse.get_pressed()[2]
 
         if left_mouse or space:
-            GameObject.shoot(self, 1, 2000)
+            GameObject.shoot(self, 2, 2000)
 
         if shift and right_mouse:
             Bullet.kill_all()
@@ -280,10 +299,10 @@ class Player(GameObject):
 
         if True:
             if game.loop.keys_pressed[game.pygame.K_a]:
-                self.targetOrientation.degrees -= 10
+                self.targetOrientation.degrees -= 1
 
             if game.loop.keys_pressed[game.pygame.K_d]:
-                self.targetOrientation.degrees += 10
+                self.targetOrientation.degrees += 1
 
         # f: change direction
         for event in game.loop.events:
