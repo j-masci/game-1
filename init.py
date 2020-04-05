@@ -3,6 +3,7 @@ import game, collections, os, pygame_gui, time, pprint
 
 # starts the game
 def start():
+
     game.pygame.init()
 
     # centers the window to be opened
@@ -34,8 +35,7 @@ def start():
         times = collections.OrderedDict()
 
         # gets and clears queued events
-        game.loop.events = game.pygame.event.get()
-        game.loop.keys_pressed = game.pygame.key.get_pressed()
+        game.events.update(game.pygame.event.get(), game.pygame.key.get_pressed())
 
         # fill the background
         game.window_surface.fill(game.config.background_color)

@@ -1,14 +1,14 @@
 # this is the god module, if that's a thing
 import pygame, pygame_gui, sys, math
 from esper import esper
-import classes, config, utils, init, exceptions, components, processors, populator, draw, colors, random
-import game_objects, mapping_functions, on_screen_debugger
+import classes, config, utils, init, exceptions, components, processors, populator, colors, random
+import game_objects, mapping_functions, on_screen_debugger, temp
 
 # rebelling against imports
 config = config
 random = random
-draw = draw
 sys = sys
+temp = temp
 math = math
 init = init
 utils = utils
@@ -29,6 +29,7 @@ clock = pygame.time.Clock()
 debugger = classes.Debugger()
 timer = classes.Timer()
 loop = classes.Loop()
+events = classes.Events()
 world = esper.World(config.ecs_timed)
 game_objects = game_objects
 objects = []

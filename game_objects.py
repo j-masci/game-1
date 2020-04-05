@@ -54,7 +54,7 @@ class GameObject:
         self.can_shoot_at = game.loop.count + rate
 
         bullet = Bullet(duration)
-        bullet.velocity = 8 * self.orientation.unit_vector()
+        bullet.velocity = 0.5 * self.orientation.unit_vector()
         bullet.position = self.position.copy()
         game.objects.append(bullet)
 
@@ -140,7 +140,7 @@ class Explosion(GameObject):
         self.spawn_time = game.loop.count
 
         self.life = 0
-        self.max_life = 16
+        self.max_life = 60
         self.increment = 2
 
     def draw(self):

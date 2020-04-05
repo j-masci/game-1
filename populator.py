@@ -6,7 +6,10 @@ def populate():
     # entities
     # add_circles(7)
     game.player = game.game_objects.Player()
-    game.objects.append(game.player)
+
+    # game.objects.append(game.player)
+
+    game.objects.append(game.temp.Thing())
 
     # processors
     game.world.add_processor(game.processors.Events())
