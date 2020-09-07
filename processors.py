@@ -11,7 +11,7 @@ class Events(Processor):
     def process(self):
 
         pg = game.pygame
-        keys = game.events._keys_pressed
+        keys = game.events.keys_pressed
 
         # alt-f4.
         # todo: this actually causes a fatal error which happens to be ok for now since that also quits the game.

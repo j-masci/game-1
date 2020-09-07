@@ -21,10 +21,10 @@ class Thing:
 
     def update(self):
 
-        if game.events.key_up_occurred(game.pygame.K_1):
+        if game.events.key_up_occurred(None, game.pygame.K_1):
             self.add_point()
 
-        if game.events.key_up_occurred(game.pygame.K_2):
+        if game.events.key_up_occurred(None, game.pygame.K_2):
             self.del_point()
 
     def draw(self):
